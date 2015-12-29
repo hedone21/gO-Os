@@ -1,50 +1,41 @@
-[ORG 0x00]
-[BITS 16]
+; Start in boot sector
+org 0x7C00
 
-SECTION .text
+; Assign video buffer to es
+mov ax, 0xB800
+mov es, ax
 
-jmp 0x07c0:START
+; Clear Screen
+mov ax, [Background]
+mov bx, 0
+mov cx, 80*25*2
+CLEAR_SCREEN:
+	mov [es:bx], ax
+	add bx, 1
+	loop CLEAR_SCREEN
 
-START:
-	mov ax, 0x07c0
-	mov ds, ax
-	mov ax, 0xB800
+; Read 1st hard drisk
+READ:
+	mov ax, 0x0800
 	mov es, ax
+	mov bx, 0
 
-	mov si, 0
+	mov ah, 2
+	mov al, 1
+	mov ch, 0
+	mov cl, 2
+	mov dh, 0
+	mov dl, 0x80
 
-.SCREENCLEARLOOP:
-	mov byte [es: si], 0
-	mov byte [es: si+1], 0x0A
+	int 0x13
+	jc READ
 
-	add si, 2
-
-	cmp si, 80 * 25 * 2
-
-	jl .SCREENCLEARLOOP
-
-	mov si, 0
-	mov di, 0
-
-.MESSAGELOOP:
-	mov cl, byte [si + MESSAGE1]
-	cmp cl, 0
-	je .MESSAGEEND
-
-	mov byte [es: di], cl
-
-	add si, 1
-	add di, 2
-
-	jmp .MESSAGELOOP
-
-.MESSAGEEND:
-
-MESSAGE1:
-	db 'Start OS boot loader.', 0
+jmp 0x8000
 
 jmp $
 
-times 510 - ($ - $$) db 0x00
-db 0x55
-db 0xAA
+Background: db 0x00
+
+; Fill other area
+times 510-($-$$) db 0x00
+dw 0xAA55
