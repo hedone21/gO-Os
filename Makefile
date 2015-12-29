@@ -1,4 +1,7 @@
-all: Bootloader OS default
+all: Ready Bootloader OS default
+
+Ready:
+	mkdir -p result
 
 Bootloader:
 	make -C bootloader
@@ -9,7 +12,6 @@ OS:
 	mv virtualos/os.bin result/
 
 default:
-	mkdir -p result
 	cat result/bootloader.bin result/os.bin > result/disk.img
 
 clean:
