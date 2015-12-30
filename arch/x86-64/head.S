@@ -15,7 +15,7 @@ jmp 0x08:Entry32
 
 [bits   32]
 Entry32:
-; 세그먼트 레지스터 초기화
+; Init segment register
 mov     bx, dataDescriptor
 mov     ds, bx
 mov     es, bx
@@ -25,11 +25,11 @@ mov     ss, bx
 xor     esp, esp
 mov     esp, 0x9FFFF
 
-; es 레지스터에 비디오 디스크립터 저장
+; Save video discriptor to es
 mov     ax, 0x18
 mov     es, ax
 
-; 문자 출력
+; Print word
 mov     ah, 0x09
 mov     al, 'P'
 mov     [es:0x0000], ax
