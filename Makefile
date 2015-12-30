@@ -8,8 +8,8 @@ Bootloader:
 	mv bootloader/bootloader.bin result/
 
 OS:
-	make -C virtualos
-	mv virtualos/os.bin result/
+	make -C arch/x86-64
+	mv arch/x86-64/os.bin result/
 
 default:
 	cat result/bootloader.bin result/os.bin > result/disk.img

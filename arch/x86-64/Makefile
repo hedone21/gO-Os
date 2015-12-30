@@ -2,8 +2,8 @@ TARGET=os.bin
 
 all: os
 
-os: os.asm
-	nasm -o $(TARGET) os.asm
+os: head.S
+	nasm -o $(TARGET) head.S
 
 clean:
 	rm -rf $(TARGET)
