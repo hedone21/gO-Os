@@ -2,8 +2,8 @@ TARGET=bootloader.bin
 
 all: bootloader
 
-bootloader: bootloader.asm
-	nasm -o $(TARGET) bootloader.asm
+bootloader: bootloader.S
+	nasm -o $(TARGET) bootloader.S
 
 clean:
 	rm -rf $(TARGET)
