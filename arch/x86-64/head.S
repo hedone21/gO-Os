@@ -30,21 +30,10 @@ mov     ax, 0x18
 mov     es, ax
 
 ; Print word
-mov     ah, 0x09
-mov     al, 'P'
-mov     [es:0x0000], ax
-mov     al, 'r'
-mov     [es:0x0002], ax
-mov     al, 'o'
-mov     [es:0x0004], ax
-mov     al, 't'
-mov     [es:0x0006], ax
-mov     al, 'e'
-mov     [es:0x0008], ax
-mov     al, 'c'
-mov     [es:0x000A], ax
-mov     al, 't'
-mov     [es:0x000C], ax
+mov     ax, 0
+mov     ds, ax
+mov     si, message1
+call    PrintString
 
 jmp     $
 
@@ -91,6 +80,25 @@ videoDescriptor equ 0x18
 	db 0x00                 ; base 24~32: 0
 gdt_end:
 
-jmp $
+message1 db "Enter Protected Area...", 0
+
+PrintString:
+	pusha
+	mov     ax, 0xB800
+	mov     es, ax
+	mov     ah, 0x0A        ; text color
+	mov     di, 0           ; video offset
+.loop:
+	mov     al, [ds:si]     ; load a text
+	cmp     al, 0
+	je      .endFunc 
+
+	mov     [es:di], ax     ; print to video memory
+	add     si, 1 
+	add     di, 2
+	jmp     .loop
+.endFunc:
+	popa
+	ret
 
 times 512-($-$$) db 0x00
