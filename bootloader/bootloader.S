@@ -1,18 +1,18 @@
-; Start in boot sector
-org 0x7C00
+/* Start in boot sector */
+.org 0x7C00
 
-; Assign video buffer to es
-mov ax, 0xB800
-mov es, ax
+/* Assign video buffer to es */
+movw $0xB800, %ax
+movw %ax, %es
 
-; Clear Screen
-mov ax, [Background]
-mov bx, 0
-mov cx, 80*25*2
-CLEAR_SCREEN:
-	mov [es:bx], ax
+/* Clear Screen */
+movw $0, %ax
+movw $0, %bx
+movw $80*25*2, %cx
+clear_screen:
+	movw %ax, %es:%
 	add bx, 1
-	loop CLEAR_SCREEN
+	loop clear_screen
 
 ; Read 1st hard drisk
 READ:
@@ -33,8 +33,6 @@ READ:
 jmp 0x8000
 
 jmp $
-
-Background: db 0x00
 
 ; Fill other area
 times 510-($-$$) db 0x00
