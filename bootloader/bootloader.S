@@ -1,39 +1,50 @@
-/* Start in boot sector */
-.org 0x7C00
+#define MSG(x)	movw $x, %si; call print_message
 
-/* Assign video buffer to es */
-movw $0xB800, %ax
-movw %ax, %es
+.org 0x00
+.code16
 
-/* Clear Screen */
-movw $0, %ax
-movw $0, %bx
-movw $80*25*2, %cx
-clear_screen:
-	movw %ax, %es:%
-	add bx, 1
-	loop clear_screen
+.text
+.global _start
+_start:
+	cld
+	movw $reading_hd_s, %si
+	call print_message
+	hlt
 
-; Read 1st hard drisk
-READ:
-	mov ax, 0x0800
-	mov es, ax
-	mov bx, 0
+read_hd:
+	movw $0x0800, %ax
+	movw %ax, %es
+	movw $0, %bx
 
-	mov ah, 2
-	mov al, 1
-	mov ch, 0
-	mov cl, 2
-	mov dh, 0
-	mov dl, 0x80
+	movb $2, %ah
+	movb $1, %al
+	movb $0, %ch
+	movb $2, %cl
+	movb $0, %dh
+	movb $0x80, %dl
 
-	int 0x13
-	jc READ
+	int $0x13
+	jc read_hd
+
+	cld
+	movw $reading_hd_okay_s, %si
+	call print_message
+	hlt
 
 jmp 0x8000
 
-jmp $
+reading_hd_s:	.asciz "Reading hard disk... "
+reading_hd_okay_s:	.asciz "OK\n "
 
-; Fill other area
-times 510-($-$$) db 0x00
-dw 0xAA55
+1:
+	movw	$0x0001, %bx
+	movb	$0xe, %ah
+	int	$0x10		/* display a byte */
+print_message:
+	lodsb
+	cmpb	$0, %al
+	jne	1b	/* if not end of string, jmp to display */
+	ret
+
+.org 0x01fe, 0
+.word 0xaa55

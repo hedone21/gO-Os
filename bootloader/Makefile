@@ -1,10 +1,11 @@
-TARGET=bootloader.bin
+TARGET=bootloader.o
+BINARY=bootloader
 
 all: bootloader
 
 bootloader: bootloader.S
-	nasm -o $(TARGET) bootloader.S
+	as -o $(TARGET) bootloader.S
+	ld --oformat binary -T bootloader.ld -o $(BINARY) $(TARGET)
 
 clean:
-	rm -rf $(TARGET)
-
+	rm -rf $(TARGET) $(BINARY)
