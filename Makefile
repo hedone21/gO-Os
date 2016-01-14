@@ -5,14 +5,14 @@ Ready:
 
 Bootloader:
 	make -C bootloader
-	mv bootloader/bootloader.bin result/
+	mv bootloader/bootloader result/
 
 OS:
 	make -C arch/x86-64
 	mv arch/x86-64/os.bin result/
 
 default:
-	cat result/bootloader.bin result/os.bin > result/disk.img
+	cat result/bootloader result/os.bin > result/disk.img
 
 clean:
 	rm -rf result/*
