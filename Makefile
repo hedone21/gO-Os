@@ -15,4 +15,6 @@ default:
 	cat result/bootloader result/os.bin > result/disk.img
 
 clean:
+	make -C bootloader clean
+	make -C arch/x86-64 clean
 	rm -rf result/*
