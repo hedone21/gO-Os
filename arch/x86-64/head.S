@@ -1,7 +1,8 @@
-org 0x8000
+org 0x00
 
 xor ax, ax
 lgdt [gdtr]
+dw 0x7777
 cli
 mov eax, cr0
 or eax, 1
