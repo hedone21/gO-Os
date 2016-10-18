@@ -1,4 +1,4 @@
-# osstudy
+# g/OS
 OS for studing purpose
 
 ## Compile
