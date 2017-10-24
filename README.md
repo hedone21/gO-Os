@@ -1,5 +1,5 @@
-# g/OS
-OS for studing purpose
+# gO-Os
+Extremely very small operating system
 
 ## Compile
 Compile is easy. If you have as (GNU Assembler), just run command below.

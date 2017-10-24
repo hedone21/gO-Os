@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include <string.h>
  
-#include <gos/debug.h>
-#include <gos/tty.h>
+#include <go-os/debug.h>
+#include <go-os/tty.h>
  
 void kernel_early(void)
 {
